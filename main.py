@@ -36,11 +36,10 @@ async def get_gemini_response(user_message: str) -> str:
         "contents": [
             {
                 "role": "user",
-                "parts": [{"text": SYSTEM_PROMPT}]
-            },
-            {
-                "role": "user",
-                "parts": [{"text": user_message}]
+                "parts": [
+                    {"text": SYSTEM_PROMPT},
+                    {"text": user_message}
+                ]
             }
         ]
     }
