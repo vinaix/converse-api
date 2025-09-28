@@ -26,16 +26,14 @@ POLLINATIONS_BASE_URL = os.getenv("POLLINATIONS_BASE_URL") #image
 # ✅ Your system prompt
 SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT")
 
-# Gemini: Ask Gemini API
 async def get_gemini_response(user_message: str) -> str:
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
     headers = {"Content-Type": "application/json"}
     params = {"key": GEMINI_API_KEY}
     
     data = {
         "contents": [
             {
-                "role": "user",
                 "parts": [
                     {"text": SYSTEM_PROMPT},
                     {"text": user_message}
@@ -47,7 +45,8 @@ async def get_gemini_response(user_message: str) -> str:
     async with httpx.AsyncClient() as client:
         response = await client.post(url, headers=headers, params=params, json=data)
         response.raise_for_status()
-        gemini_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+        response_json = response.json()
+        gemini_text = response_json["candidates"][0]["content"]["parts"][0]["text"]
         return gemini_text
 
 # Pollinations: Generate image
